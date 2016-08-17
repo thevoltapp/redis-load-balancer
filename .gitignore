@@ -1,4 +1,5 @@
 *.pyc
 *.xml
+.idea
 .DS_Store
 /renv
