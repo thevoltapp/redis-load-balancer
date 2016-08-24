@@ -30,7 +30,7 @@ class LoadBalancerClient(object):
             min_ch = min(channel_count, key=channel_count.get)
             if self.redis_conn.publish(min_ch, message):
                 self.redis_conn.incr("%s-%s" % (min_ch, self.suffix))
-                return 'success'
+                print 'success'
             else:
                 self.choose_other_channel(min_ch,  channel_count, message)
         except ValueError:
@@ -50,7 +50,7 @@ class LoadBalancerClient(object):
                 channel_count[channel] = server.get_load_count()
 
         except redis.ConnectionError:
-            raise Exception('Server Redis Connection is failed')
+            raise Exception('Redis Connection is failed')
 
         min_ch = min(channel_count, key=channel_count.get)
         try:
@@ -62,8 +62,6 @@ class LoadBalancerClient(object):
         except redis.ConnectionError:
             raise Exception('Redis Connection is failed')
 
-    # if __name__ == '__main__':
-    #     a_game = Comm_system()
 
 class LoadBalancerServer(object):
 
@@ -93,6 +91,4 @@ class LoadBalancerServer(object):
     def set_load_count(self):
         self.redis_conn.set(self.channel_name(), 0)
 
-p.subscribe('channel-1')
-client = LoadBalancerClient(CHANNEL_NAMES, host='localhost', port=6379,db=0)
-b = client.distribute_message('kerem')
+
